@@ -1,9 +1,9 @@
 version: '2'
 
-# The CHORDS configuration (arm) for docker-compose. 
+# The CHORDS configuration (arm) for docker-compose.
 #
 # It defines a MyQSL database service (chords_mysql), a CHORDS
-# Ruby on Rails web server (chords_app), and a persistent 
+# Ruby on Rails web server (chords_app), and a persistent
 # database volume (mysql-data).
 #
 # This configuration is used to both build the chords image,
@@ -16,8 +16,8 @@ version: '2'
 #   docker push ncareol/rpi-chords
 #
 # To deploy/start/stop CHORDS:
-#   curl -kL https://github.com/NCAR/chords_portal/raw/docker/rpi-docker-compose.yml > docker-compose.yml
-#   docker-compose pull 
+#   curl -kL https://github.com/NCAR/chords/raw/master/rpi-docker-compose.yml > docker-compose.yml
+#   docker-compose pull
 #   docker-compose -p chords up -d
 #   docker-compose -p chords down
 #
@@ -29,9 +29,6 @@ version: '2'
 services:
   app:
     container_name: chords_app
-    build:
-      context: ./
-      dockerfile: rpi-Dockerfile
     image: ncareol/rpi-chords
     volumes:
       - mysql-data:/var/lib/mysql
@@ -56,6 +53,6 @@ services:
       - MYSQL_PASSWORD=${CHORDS_DB_PW}
 
 volumes:
-  mysql-data: 
-  
- 
+  mysql-data:
+
+

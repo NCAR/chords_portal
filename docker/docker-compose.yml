@@ -1,9 +1,9 @@
 version: '2'
 
-# The CHORDS configuration (x86) for docker-compose. 
+# The CHORDS configuration (x86) for docker-compose.
 #
 # It defines a MyQSL database service (chords_mysql), a CHORDS
-# Ruby on Rails web server (chords_app), and a persistent 
+# Ruby on Rails web server (chords_app), and a persistent
 # database volume (mysql-data).
 #
 # This configuration is used to both build the chords image,
@@ -16,8 +16,8 @@ version: '2'
 #   docker push ncareol/chords
 #
 # To deploy/start/stop CHORDS:
-#   curl -kL https://github.com/NCAR/chords_portal/raw/docker/docker-compose.yml > docker-compose.yml
-#   docker-compose pull 
+#   curl -kL https://github.com/NCAR/chords/raw/master/docker-compose.yml > docker-compose.yml
+#   docker-compose pull
 #   docker-compose -p chords up -d
 #   docker-compose -p chords down
 #
@@ -29,16 +29,15 @@ version: '2'
 services:
   app:
     container_name: chords_app
-    build:
-      context: ./
-      dockerfile: Dockerfile
     image: ncareol/chords:mysql
     volumes:
       - mysql-data:/var/lib/mysql
+      - unicornsocket:/var/run/unicorn/
     environment:
       - RAILS_ENV=production
       - CHORDS_DB_PW
       - SECRET_KEY_BASE=aaaaaaaaaaa
+      - CHORDS_UNICORN_SOCKET=/var/run/unicorn/unicorn.sock
     command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
     ports:
         - "80:80"
@@ -55,7 +54,15 @@ services:
       - MYSQL_USER=chords_demo_user
       - MYSQL_PASSWORD=${CHORDS_DB_PW}
 
+  web:
+    container_name: chords_web
+    image: nginx:alpine
+    volumes:
+      - ./docker/web/nginx_default.conf:/etc/nginx/conf.d/default.conf
+      - ./:/chords
+      - unicornsocket:/var/run/unicorn/
+
 volumes:
-  mysql-data: 
-  
- 
+  mysql-data:
+  unicornsocket:
+

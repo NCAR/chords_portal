@@ -28,7 +28,7 @@ worker_processes workers
 
 preload_app true
 
-listen "/chords/tmp/unicorn.chords.sock"
+listen(ENV['CHORDS_UNICORN_SOCKET'], backlog: 64) if ENV['CHORDS_UNICORN_SOCKET']
 
 before_fork do |server, worker|
   # disconnect from database

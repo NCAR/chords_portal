@@ -44,3 +44,5 @@ bower.json
 /passenger.*
 vendor/ruby
 chords_env.sh
+/*Dockerfile
+/*docker-compose*.yml

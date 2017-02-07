@@ -31,9 +31,6 @@ server="mysql"
 seeded_flag="/var/lib/mysql/CHORDS_SEEDED_$RAILS_ENV"
 chords_env="./chords_env.sh"
 
-# (Re)start nginx
-service nginx restart
-
 # Make sure that the log directory exists
 mkdir -p log
 
@@ -58,7 +55,7 @@ export CHORDS_OPERATING_SYSTEM=`uname --operating-system`
 export WORKERS=4
 
 # See if there is an existing database
-if [ ! -e $seeded_flag ] 
+if [ ! -e $seeded_flag ]
 then
   echo "**** $seeded_flag not found. We will attempt to create the database."
 
@@ -69,13 +66,13 @@ then
       echo
       break
     fi
-    
+
     if [ $count -eq 60 ]; then
       echo
       echo "Could not contact the database server $server, aborting CHORDS app startup."
       exit 1
     fi
-    
+
     sleep 1
   done
 
